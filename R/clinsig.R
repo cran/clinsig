@@ -29,6 +29,7 @@ clinsig<-function(pre.x,post.x,dys.mct=NA,func.mct=NA,dys.disp=NA,
  # functional distribution
  if(is.na(dys.qnts[1])) crit[1]<-dys.mct+disp.mult[1]*dys.disp*dir.effect
  else crit[1]<-quantile(pre.x,dys.qnts)[(dir.effect+3)/2]
+ if(crit[1] < 0) crit[1]<-0
  if(dir.effect > 0) sigsums[1]<-sum(post.x > crit[1],na.rm=TRUE)
  else sigsums[1]<-sum(post.x < crit[1],na.rm=TRUE)
  a.pass<-ifelse(dir.effect < 0,post.mct < crit[1],post.mct > crit[1])
@@ -70,38 +71,32 @@ plot.clinsig<-function(x,main="Clinical significance plot",
  }
  cutofflaby<-x$crit
  cutoffrange<-range(x$crit)
- minlabspace<-diff(par("usr")[3:4]/10)
- if(length(x$crit[!is.na(x$crit)]) > 1) {
-  # if any crit are so close that the labels would overlap
-  if(any(diff(x$crit[!is.na(x$crit)]) < minlabspace)) {
-   minindex<-which(x$crit == cutoffrange[1])[1]
-   cutofflaby[minindex]<-x$crit[minindex]-minlabspace/4
-   maxindex<-which(x$crit == cutoffrange[2])[1]
-   cutofflaby[maxindex]<-x$crit[maxindex]+minlabspace/4
-  }
- }
+ minlabspace<-strheight("M")
+ abcnpos<-spreadout(c(x$crit,x$func.mct),minlabspace)
  abline(h=x$crit[1],lty=3)
- mtext(paste(" a",signif(x$crit[1],2),sep="="),4,at=cutofflaby[1],las=1)
+ mtext(paste(" a",signif(x$crit[1],2),sep="="),4,at=abcnpos[1],las=1)
  if(!is.na(x$crit[2])) {
   abline(h=x$crit[2],lty=3)
-  mtext(paste(" b",signif(x$crit[2],2),sep="="),4,at=cutofflaby[2],las=1)
+  mtext(paste(" b",signif(x$crit[2],2),sep="="),4,at=abcnpos[2],las=1)
  }
  if(!is.na(x$crit[3])) {
   abline(h=x$crit[3],lty=3)
-  mtext(paste(" c",signif(x$crit[3],2),sep="="),4,at=cutofflaby[3],las=1)
+  mtext(paste(" c",signif(x$crit[3],2),sep="="),4,at=abcnpos[3],las=1)
  }
  if(!is.na(x$func.mct)) {
   abline(h=x$func.mct,lty=1)
-  mtext(paste(" norm",signif(x$func.mct,2),sep="="),4,at=x$func.mct,las=1)
+  mtext(paste(" norm",signif(x$func.mct,2),sep="="),4,at=abcnpos[4],las=1)
  }
  points(x$pre.mct,x$post.mct,pch=pch+9,cex=1.5)
  par(mar=oldmar)
 }
 
 hist.clinsig<-function(x,breaks=NA,main="",xlab="Score",ylab="Frequency",
- xlim=NA,ylim=NA,col=2:3,border=par("fg"),...) {
+ xlim=NA,ylim=NA,col=2:3,border=par("fg"),only.pairs=FALSE,...) {
+
  xrange<-range(c(x$pre.x,x$post.x),na.rm=TRUE)
  if(is.na(breaks)) breaks<-floor(xrange[1]):ceiling(xrange[2])
+ if(only.pairs) x$pre.x<-x$pre.x[!is.na(x$post.x)]
  prexcounts<-table(cut(x$pre.x,breaks))
  postxcounts<-table(cut(x$post.x,breaks))
  if(is.na(ylim[1])) ylim<-c(0,max(c(prexcounts,postxcounts)))
@@ -112,43 +107,47 @@ hist.clinsig<-function(x,breaks=NA,main="",xlab="Score",ylab="Frequency",
  plot(0,main=main,xlab=xlab,ylab=ylab,xlim=xlim,ylim=ylim,type="n",axes=FALSE,...)
  axis(1,labels=names(prexcounts),at=xaxpos)
  axis(2)
- rect(xaxpos-barwidth,rep(0,length(breaks)),xaxpos,prexcounts,col=col[1],border=border)
- rect(xaxpos,rep(0,length(breaks)),xaxpos+barwidth,postxcounts,col=col[2],border=border)
+ rect(xaxpos-barwidth,rep(0,length(breaks)),xaxpos,prexcounts,col=col[1],
+  border=border)
+ rect(xaxpos,rep(0,length(breaks)),xaxpos+barwidth,postxcounts,col=col[2],
+  border=border)
  par(xpd=TRUE)
- Mht<-strheight("M")
- segments(x$pre.mct,-0.1,x$pre.mct,ylim[2],lty=2,lwd=2)
- text(x$pre.mct,ylim[2]+Mht,"pre",adj=c(0.5,0))
- segments(x$post.mct,-0.1,x$post.mct,ylim[2],lty=2,lwd=2)
- shiftpost<-abs(x$pre.mct-x$post.mct < strwidth("post"))
- text(x$post.mct,ylim[2]+(1+shiftpost)*Mht,"post",adj=c(0.5,0))
+ ppht<-ylim[2]+strheight("M")*2
+ plotlim<-par("usr")
+ linebottom<-plotlim[3]-diff(plotlim[3:4])/40
+ segments(x$pre.mct,linebottom,x$pre.mct,ylim[2],lty=2,lwd=2)
+ ppnpos<-spreadout(c(x$pre.mct,x$post.mct,x$func.mct),strwidth("normo"))
+ text(ppnpos[1],ppht,"pre",adj=c(0.5,0))
+ segments(x$post.mct,linebottom,x$post.mct,ylim[2],lty=2,lwd=2)
+ text(ppnpos[2],ppht,"post",adj=c(0.5,0))
  if(!is.na(x$func.mct)) {
-  segments(x$func.mct,-0.1,x$func.mct,ylim[2],lty=1,lwd=2)
-  text(x$func.mct,ylim[2]+Mht,"norm",adj=c(0.5,0))
+  segments(x$func.mct,linebottom,x$func.mct,ylim[2],lty=1,lwd=2)
+  text(ppnpos[3],ppht,"norm",adj=c(0.5,0))
  }
- par(xpd=FALSE)
- shiftb<-abs(x$crit[1]-x$crit[2] < strwidth("m")) ||
-  abs(x$crit[2]-x$crit[3] < strwidth("m"))
+ abcht<-ylim[2]+strheight("m")
+ abcpos<-spreadout(x$crit,strwidth("m"))
  if(!is.na(x$crit[1])) {
-  segments(x$crit[1],-0.1,x$crit[1],ylim[2],lty=3,lwd=2)
-  text(x$crit[1],ylim[2],"a",adj=c(0.5,0))
+  segments(x$crit[1],linebottom,x$crit[1],ylim[2],lty=3,lwd=2)
+  text(abcpos[1],abcht,"a",adj=c(0.5,0))
  }
  if(!is.na(x$crit[2])) {
-  segments(x$crit[2],-0.1,x$crit[2],ylim[2],lty=3,lwd=2)
-  text(x$crit[2],ylim[2]+shiftb*Mht,"b",adj=c(0.5,0))
+  segments(x$crit[2],linebottom,x$crit[2],ylim[2],lty=3,lwd=2)
+  text(abcpos[2],abcht,"b",adj=c(0.5,0))
  }
  if(!is.na(x$crit[3])) {
-  segments(x$crit[3],-0.1,x$crit[3],ylim[2],lty=3,lwd=2)
-  text(x$crit[3],ylim[2],"c",adj=c(0.5,0))
+  segments(x$crit[3],linebottom,x$crit[3],ylim[2],lty=3,lwd=2)
+  text(abcpos[3],abcht,"c",adj=c(0.5,0))
  }
+ par(xpd=FALSE)
 }
 
 print.clinsig<-function(x,...) {
  cat("\nClinical significance test\n",x$post.n,"post-assessments\n")
- cat(x$sigsums[1],"clients passed the \"a\" criterion of",signif(x$crit[1],2),"\n")
+ cat(x$sigsums[1],"clients met the \"a\" criterion of",signif(x$crit[1],2),"\n")
  if(!is.na(x$crit[2]))
-  cat(x$sigsums[2],"clients passed the \"b\" criterion of",signif(x$crit[2],2),"\n")
+  cat(x$sigsums[2],"clients met the \"b\" criterion of",signif(x$crit[2],2),"\n")
  if(!is.na(x$crit[3]))
-  cat(x$sigsums[3],"clients passed the \"c\" criterion of",signif(x$crit[3],2),"\n")
+  cat(x$sigsums[3],"clients met the \"c\" criterion of",signif(x$crit[3],2),"\n")
  cat("The",x$mct,"of the post-intervention scores met:\n")
  if(any(x$passed)) {
   if(x$passed[1]) cat("the a criterion\n",sep="")

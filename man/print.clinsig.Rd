@@ -2,19 +2,19 @@
 \alias{print.clinsig}
 \title{Display a clinsig list}
 \description{
- Displays the result of the \code{clinsig} function.
+ Displays the result of the \samp{clinsig} function.
 }
 \usage{
  \method{print}{clinsig}(x,...)
 }
 \arguments{
-  \item{x}{a clinsig table produced by \code{\link{clinsig}}}
-  \item{...}{additional arguments passed to \code{print}.}
+  \item{x}{a clinsig table produced by \samp{\link{clinsig}}}
+  \item{...}{additional arguments passed to \samp{print}.}
 }
 \details{
- \code{print.clinsig} displays a list produced by \code{clinsig}.
+ \samp{print.clinsig} displays a list produced by \samp{clinsig}.
 }
 \value{nil}
 \author{Jim Lemon}
-\seealso{\code{\link{clinsig}}}
+\seealso{\samp{\link{clinsig}}}
 \keyword{misc}

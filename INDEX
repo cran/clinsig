@@ -2,3 +2,4 @@ clinsig		calculate clinical significance criteria
 hist.clinsig	display counts of pre- and post- assessment scores and criteria
 plot.clinsig	display a scattergram of pre- and post- assessment scores and criteria
 print.clinsig	display the result of the clinsig function
+spreadout	spread numeric values out to a specified minimum interval
