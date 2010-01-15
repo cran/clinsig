@@ -98,7 +98,7 @@
 
  If only the pre-intervention and post-intervention scores are provided, the
  function calculates a cutoff score for significant change based upon
- \samp{disp.mult} times the measure of disperson for the pre-intervention
+ \samp{disp.mult} times the measure of dispersion for the pre-intervention
  scores if \samp{dys.disp} is specified. However, if \samp{dys.qnts} is not NA,
  the \samp{"a"} cutoff score is set to one of the quantiles of the
  pre-intervention score distribution. If the normal MCT is supplied and it is

@@ -10,7 +10,7 @@
   xlim=NA,ylim=NA,pch=par("pch"),point.id=NA,...)
 }
 \arguments{
- \item{x}{a clinsig table produced by \samp{\link{clinsig}}}
+ \item{x}{a clinsig table produced by \link{clinsig}}
  \item{main}{The title for the plot.}
  \item{xlab,ylab}{The labels for the axes.}
  \item{xlim,ylim}{The limits for the plot.}
@@ -24,5 +24,5 @@
 }
 \value{nil}
 \author{Jim Lemon}
-\seealso{\samp{\link{clinsig}}}
+\seealso{\link{clinsig}}
 \keyword{misc}

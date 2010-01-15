@@ -9,7 +9,7 @@
   xlim=NA,ylim=NA,col=2:3,border=par("fg"),only.pairs=FALSE,...)
 }
 \arguments{
- \item{x}{a clinsig table produced by \samp{\link{clinsig}}}
+ \item{x}{a clinsig table produced by \link{clinsig}}
  \item{breaks}{The breaks to be used in categorizing scores.}
  \item{main}{The title for the plot.}
  \item{xlab,ylab}{The labels for the axes.}
@@ -32,5 +32,5 @@
 }
 \value{nil}
 \author{Jim Lemon}
-\seealso{\samp{\link{clinsig}}}
+\seealso{\link{clinsig}}
 \keyword{misc}

@@ -8,7 +8,7 @@
  \method{print}{clinsig}(x,...)
 }
 \arguments{
-  \item{x}{a clinsig table produced by \samp{\link{clinsig}}}
+  \item{x}{a clinsig table produced by \link{clinsig}}
   \item{...}{additional arguments passed to \samp{print}.}
 }
 \details{
@@ -16,5 +16,5 @@
 }
 \value{nil}
 \author{Jim Lemon}
-\seealso{\samp{\link{clinsig}}}
+\seealso{\link{clinsig}}
 \keyword{misc}
