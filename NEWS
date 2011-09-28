@@ -1,3 +1,7 @@
+version 1.0-3
+
+	added name space
+
 version 1.0-2
 
 	changed \code tags to \samp and removed formatting from \link tags

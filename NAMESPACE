@@ -1,0 +1,9 @@
+# created 28/9/2011 - Jim Lemon
+export(
+clinsig,
+spreadout
+)
+# methods
+S3method(hist,clinsig)
+S3method(plot,clinsig)
+S3method(print,clinsig)

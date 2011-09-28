@@ -1,0 +1,11 @@
+24965ff3acb2867a07307c751353f8dd *DESCRIPTION
+590d8693fc68834808cd825f01a4ba9b *INDEX
+aba791812763a4308b15d8c0c2012317 *NAMESPACE
+c0f3b6732303be519f3fc25c8fdb59e3 *NEWS
+5b8bd6bee50e8a094a4306eaca7c3a90 *R/clinsig.R
+45b113476e355fa9117ee728b8071f2a *R/spreadout.R
+8e738abe43caf30e972dd7d8298ef71c *man/clinsig.Rd
+1d6e16043faced8191b154c289363e23 *man/hist.clinsig.Rd
+f7e0bf1c385ad648d2e2ad2e332e6b35 *man/plot.clinsig.Rd
+27dc498a7749bb2db3aa2b4e3aa4c6fb *man/print.clinsig.Rd
+0fbe2bd73451dec6abdb0fb993eabb18 *man/spreadout.Rd
