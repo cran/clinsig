@@ -61,13 +61,13 @@
   MCT met the respective criteria}
 
  As a side effect, a scatterplot of the pre- and post-scores and MCTs with the
- calculated cutoff scores as lines is displayed.
+ calculated cutoff scores as lines is displayed if \samp{do.plot} is TRUE.
 }
 \details{
  The \samp{clinsig} function calculates both parametric and non-parametric versions
  of the Jacobson-Truax estimates of clinical significance. The number of estimates
  produced will depend upon which arguments are supplied. The \samp{"a"} estimate
- is always calculated as it only requires the measure of central tendency and
+ is always calculated as it only requires the measure of central tendency (MCT) and
  dispersion of the pre-intervention scores. The \samp{c} estimate requires
  that the normal (non-pathologic) measure of central tendency be specified.
  The \samp{"b"} estimate requires the dispersion of the normal MCT. If the

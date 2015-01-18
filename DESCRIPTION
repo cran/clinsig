@@ -1,13 +1,13 @@
 Package: clinsig
-Version: 1.0-4
-Title: Clinical significance functions.
-Date: 2013-04-14
-Author: Jim Lemon <jim@bitwrit.com.au>,
-Maintainer: Jim Lemon <jim@bitwrit.com.au>
+Version: 1.0-5
+Title: Clinical Significance Functions
+Date: 2015-01-18
+Author: Jim Lemon <drjimlemon@gmail.com>,
+Maintainer: Jim Lemon <drjimlemon@gmail.com>
 Description: Functions for calculating clinical significance.
 Depends:
 License: GPL (>= 2)
-Packaged: 2013-04-14 12:10:45 UTC; root
+Packaged: 2015-01-19 04:13:15 UTC; root
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-04-14 16:58:20
+Date/Publication: 2015-01-20 12:41:03
