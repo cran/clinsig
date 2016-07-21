@@ -1,7 +1,7 @@
 # created 28/9/2011 - Jim Lemon
-importFrom("graphics", "abline", "axis", "mtext", "par", "plot",
-           "points", "rect", "segments", "strheight", "strwidth",
-           "text")
+importFrom("graphics", "abline", "axis", "mtext", "par",
+           "plot", "points", "rect", "segments", "strheight",
+           "strwidth", "text")
 importFrom("stats", "quantile")
 export(
 clinsig,

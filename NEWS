@@ -1,3 +1,7 @@
+version 1.2
+
+        added the reliable change measure
+
 version 1.1
 
 	added imports for R CMD check

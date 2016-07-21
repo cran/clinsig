@@ -8,7 +8,7 @@
  mct="mean",disp="sd",disp.mult=c(2,2),dys.qnts=NA,
  dir.effect=NA,xlim=range(c(pre.x,post.x),na.rm=TRUE),
  ylim=range(c(pre.x,post.x),na.rm=TRUE),pch=par("pch"),
- do.plot=TRUE,point.id=NA,...)
+ do.plot=TRUE,point.id=NA,which.crit="c",coef.alpha=NA,rc.mult=1.96,...)
 }
 \arguments{
  \item{pre.x}{A vector of pre-intervention assessment scores.}
@@ -43,6 +43,13 @@
  \item{do.plot}{Whether to display a significance plot.}
  \item{point.id}{Optional text to be displayed instead of symbols for each score
   pair.}
+ \item{which.crit}{Which criterion should be used if reliable change
+  measure is to be calculated.}
+ \item{coef.alpha}{sample Cronbach's alpha for the instrument used to 
+  measure the dysfunction. If NOT NA, this causes the reliable change
+  measure to be calculated.}
+ \item{rc.mult}{The multiplier for the standard error in the reliable
+  change measure. See Details.}
  \item{...}{Additional arguments passed to \samp{plot}.}
 }
 \value{
@@ -59,6 +66,10 @@
  \item{post.n}{the number of post-intervention assessments}
  \item{passed}{a vector of three logicals indicating whether the post-intervention
   MCT met the respective criteria}
+ \item{relchng}{the reliable change measure calculated. NA if not.}
+ \item{dir.effect}{the direction of effect. see Details.}
+ \item{which.crit}{which of the three criteria should be used in 
+  calculating the reliable change measure.}
 
  As a side effect, a scatterplot of the pre- and post-scores and MCTs with the
  calculated cutoff scores as lines is displayed if \samp{do.plot} is TRUE.
@@ -74,40 +85,57 @@
  dispersion of the dysfunctional scores is not supplied, the function will
  estimate this with the function named in \samp{disp}. The user can calculate a
  measure of dispersion and pass it as \samp{dys.disp} or write a function and
- pass the name of that function as \samp{disp}.
+ pass the name of that function as \samp{disp}. Note that the use of non-
+ parametric estimates is not included in the work Jacobson and colleagues.
  
- Using the \samp{"a"} cutoff means that post-intervention scores are significant
- if they are at least a specified distance from the MCT of pre-intervention scores in
- the direction of the normal MCT (i.e. they are "far enough" from the dysfunctional
- MCT). The \samp{"b"} cutoff means that post-intervention scores are significant
- if they are within a specified distance of the normal MCT (i.e. they are "close
- enough" to the normal MCT). The \samp{"c"} cutoff means that significant
- post-intervention scores are in the direction of the normal MCT and beyond
- the weighted mean of the two MCTs (i.e. they are "on the normal side" of the average
- of the MCTs). Look at the second plot in the examples for an illustration of
- this in which there is a large effect and a clear separation of pre- and post-
- scores.
+ Using the \samp{"a"} cutoff means that post-intervention scores are 
+ significant if they are at least a specified distance from the MCT of 
+ pre-intervention scores in the direction of the normal MCT (i.e. they 
+ are "far enough" from the dysfunctional MCT). The \samp{"b"} cutoff 
+ means that post-intervention scores are significant if they are within 
+ a specified distance of the normal MCT (i.e. they are "close enough" 
+ to the normal MCT). This criterion is typically used with overlapping 
+ distributions. The \samp{"c"} cutoff means that post-intervention scores 
+ are in the direction of the normal MCT and beyond the weighted mean of 
+ the two MCTs (i.e. they are "on the normal side" of the average of the 
+ MCTs). The "c" criterion is usually recommended for non-overlapping 
+ distributions of pre- and post-scores. Look at the second plot in the 
+ examples for an illustration of this in which there is a large effect 
+ and a clear separation of pre- and post-scores.
 
- The direction of effect is usually calculated as the sign of the functional
- (normal) MCT minus the dysfunctional MCT. If one or both of these are missing,
- the pre- and post-MCTs are substituted. This assumes that the post-MCT is in
- the expected direction toward the functional MCT. If this is not the case, the
- user should set \samp{dir.effect} to 1 (higher scores = improvement)
- or -1 or the function may report improvement when the scores are actually
- indicating deterioration.
+ The direction of effect is calculated as the sign of the functional
+ (normal) MCT minus the dysfunctional MCT. If one or both of these are 
+ missing, the pre- and post-MCTs are substituted. This assumes that the 
+ post-MCT is in the expected direction toward the functional MCT. If this 
+ is not the case, the user should set \samp{dir.effect} to 1 (higher 
+ scores = improvement) or -1 (lower scores = improvement) or the function 
+ may report improvement when the scores are actually indicating 
+ deterioration.
 
- If only the pre-intervention and post-intervention scores are provided, the
- function calculates a cutoff score for significant change based upon
+ If only the pre-intervention and post-intervention scores are provided, 
+ the function calculates a cutoff score for significant change based upon
  \samp{disp.mult} times the measure of dispersion for the pre-intervention
- scores if \samp{dys.disp} is specified. However, if \samp{dys.qnts} is not NA,
- the \samp{"a"} cutoff score is set to one of the quantiles of the
- pre-intervention score distribution. If the normal MCT is supplied and it is
- less than the pre-intervention MCT, or \samp{dir.effect} is -1, the lower
- quantile is used. In all other cases, the upper cutoff is calculated. Remember
- that the quantile is not adjusted for \samp{disp.mult}.
+ scores if \samp{dys.disp} is specified. However, if \samp{dys.qnts} is 
+ not NA, the \samp{"a"} cutoff score is set to one of the quantiles of 
+ the pre-intervention score distribution. If the normal MCT is supplied 
+ and it is less than the pre-intervention MCT, or \samp{dir.effect} is -1, 
+ the lower quantile is used. In all other cases, the upper cutoff is 
+ calculated. Remember that the quantile is not adjusted for 
+ \samp{disp.mult}.
+ 
+ The reliable change measure is calculated following 
+ Evans, Margison & Barkham (1998). This
+ calculation assumes that the sample score distribution is normal. It will
+ be calculated with the measures specified in samp{mct} and samp{disp},
+ but unless these are the defaults, it is not guaranteed to be correct.
 }
-\author{Jim Lemon}
+\author{Jim Lemon - thanks to Elisa Napoleone for requesting the reliable
+ change measure.}
 \references{
+ Evans, C., Margison, F. & Barkham, M. (1998) The contribution of reliable 
+ and clinically significant change methods to evidence-based mental health.
+ Evidence Based Mental Health, 1: 70-72.
+
  Jacobson, N.S. & Truax, P. (1991) Clinical significance: a statistical
  approach to defining meaningful change in psychotherapy research. Journal
  of Consulting and Clinical Psychology, 59(1): 12-19.
@@ -130,4 +158,25 @@
   do.plot=FALSE)
  hist(little.sep,main="Closely spaced samples")
  legend(12.5,3.8,c("Pre","Post"),fill=c("red","green"))
+ # example from Evans, Margison & Barkham, 1998 with simulated data
+ set.seed(12345)
+ # values from EMB 
+ pre_mct<-1.81
+ pre_disp<-0.53
+ post_mct<-0.79
+ post_disp<-0.5
+ func_mct<-0.72
+ func_disp<-0.57
+ # accept EMB's normality of distribution
+ pre_treat<-rnorm(40,pre_mct,pre_disp)
+ post_treat<-rnorm(40,post_mct,post_disp)
+ # make sure that no scores go below zero
+ post_treat[post_treat<0]<-0
+ emb<-clinsig(pre_treat,post_treat,
+  dys.mct=pre_mct,func.mct=func_mct,
+  dys.disp=pre_disp,func.disp=func_disp,
+  coef.alpha=0.89,
+  main="Clinical significance plot with reliable change window")
+ print(emb)
+ hist(emb)
 }

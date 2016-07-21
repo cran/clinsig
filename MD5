@@ -1,9 +1,9 @@
-6fea1afb385355c2315c6c77370062af *DESCRIPTION
-f7456fd0ea58f4c1ed1f56a72b71640f *NAMESPACE
-aba7ee23f89d7b76c3852e70dbd7dad4 *NEWS
-5b8bd6bee50e8a094a4306eaca7c3a90 *R/clinsig.R
+cfcdc0bc4b4e2135e34e67826fb4799e *DESCRIPTION
+58f7facbc4fac53513d569f93e2bc5b9 *NAMESPACE
+d02597fd213f9d3f4a988ac36902dfa6 *NEWS
+e9786957a87d2579d06729a6e12ae5ca *R/clinsig.R
 45b113476e355fa9117ee728b8071f2a *R/spreadout.R
-4b0b63f48c2a4e242f099976da5dcff3 *man/clinsig.Rd
+b4a61f4dba647e8ad6185ce0f8f3b10d *man/clinsig.Rd
 1d6e16043faced8191b154c289363e23 *man/hist.clinsig.Rd
 f7e0bf1c385ad648d2e2ad2e332e6b35 *man/plot.clinsig.Rd
 27dc498a7749bb2db3aa2b4e3aa4c6fb *man/print.clinsig.Rd

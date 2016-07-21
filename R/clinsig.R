@@ -2,7 +2,7 @@ clinsig<-function(pre.x,post.x,dys.mct=NA,func.mct=NA,dys.disp=NA,
  func.disp=NA,mct="mean",disp="sd",disp.mult=c(2,2),dys.qnts=NA,
  dir.effect=NA,xlim=range(c(pre.x,post.x),na.rm=TRUE),
  ylim=range(c(pre.x,post.x),na.rm=TRUE),pch=par("pch"),
- do.plot=TRUE,point.id=NA,...) {
+ do.plot=TRUE,point.id=NA,which.crit="c",coef.alpha=NA,rc.mult=1.96,...) {
 
  # if the dysfunctional score MCT is not supplied, use the pre-MCT
  if(is.na(dys.mct)) dys.mct<-do.call(mct,list(pre.x,na.rm=TRUE))
@@ -45,9 +45,12 @@ clinsig<-function(pre.x,post.x,dys.mct=NA,func.mct=NA,dys.disp=NA,
   c.pass<-ifelse(dir.effect < 0,post.mct < crit[3],post.mct > crit[3])
  }
  else c.pass<-FALSE
+ rc<-ifelse(is.na(coef.alpha),NA,
+  rc.mult*dys.disp*sqrt(2)*sqrt(1-coef.alpha))
  clinsignif<-list(pre.x=pre.x,post.x=post.x,crit=crit,sigsums=sigsums,
   pre.mct=dys.mct,post.mct=post.mct,func.mct=func.mct,mct=mct,disp=disp,
-  post.n=sum(!is.na(post.x)),passed=c(a.pass,b.pass,c.pass))
+  post.n=sum(!is.na(post.x)),passed=c(a.pass,b.pass,c.pass),relchng=rc,
+  dir.effect=dir.effect,which.crit=which.crit)
  class(clinsignif)<-"clinsig"
  if(do.plot) plot(clinsignif,xlim=xlim,ylim=ylim,pch=pch,point.id=point.id,...)
  return(clinsignif)
@@ -58,16 +61,23 @@ plot.clinsig<-function(x,main="Clinical significance plot",
  xlim=NA,ylim=NA,pch=par("pch"),point.id=NA,...) {
 
  oldmar<-par("mar")
- par(mar=c(5,4,4,4))
+ par(mar=c(5,4,4,5))
  if(is.na(xlim[1])) xlim<-range(c(x$pre.x,x$post.x))
  if(is.na(ylim[1])) ylim<-range(c(x$pre.x,x$post.x))
  if(is.na(point.id[1]))
-  plot(x$pre.x,x$post.x,main=main,xlab=xlab,ylab=ylab,xlim=xlim,ylim=ylim,pch=pch,...)
+  plot(x$pre.x,x$post.x,main=main,xlab=xlab,ylab=ylab,
+   xlim=xlim,ylim=ylim,pch=pch,...)
  else {
-  plot(x$pre.x,x$post.x,main=main,xlab=xlab,ylab=ylab,xlim=xlim,ylim=ylim,type="n",...)
+  plot(x$pre.x,x$post.x,main=main,xlab=xlab,ylab=ylab,
+   xlim=xlim,ylim=ylim,type="n",...)
   text(x$pre.x,x$post.x,point.id)
   # set pch to 1 to get pch=10 below
   pch<-1
+ }
+ if(!is.na(x$relchng)) {
+  abline(x$relchng,1,col="lightgray")
+  abline(0,1,col="lightgray")
+  abline(-x$relchng,1,col="lightgray")
  }
  cutofflaby<-x$crit
  cutoffrange<-range(x$crit)
@@ -155,4 +165,21 @@ print.clinsig<-function(x,...) {
   if(x$passed[3]) cat("the c criterion\n",sep="")
  }
  else cat("no criteria\n")
+ if(!is.na(x$relchng)) {
+  lenx<-length(x$pre.x)
+  gtrc<-abs(x$pre.x-x$post.x) > x$relchng
+  reliable_change<-rep("None",lenx)
+  reliable_change[gtrc]<-
+   ifelse(x$dir.effect*(x$post.x[gtrc]-x$pre.x[gtrc]) > 0,
+   "Improve","Deteriorate")
+  clinical_signif<-rep("Not significant",lenx)
+  critval<-x$crit[which(letters[1:3]==x$which.crit)]
+  sig_change<-ifelse(rep(x$dir.effect,lenx) < 0,x$post.x < critval,
+   x$post.x > critval)
+  clinical_signif[sig_change]<-"Significant change"
+  ok_baseline<-ifelse(rep(x$dir.effect,lenx) < 0,x$pre.x < critval,
+   x$pre.x > critval)
+  clinical_signif[ok_baseline]<-"Okay at baseline"
+  print(table(clinical_signif,reliable_change))
+ }
 }
